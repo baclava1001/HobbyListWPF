@@ -1,0 +1,86 @@
+﻿<Window x:Class="HobbyListWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HobbyListWPF"
+        xmlns:vm="clr-namespace:HobbyListWPF.ViewModels"
+        mc:Ignorable="d"
+        Title="All the hobbies I've tried" Height="350" Width="800"
+        WindowStartupLocation="CenterScreen">
+    <!--Add HobbysForDisplayVM as a recource plus some styling-->
+    <Window.Resources>
+        <vm:HobbysForDisplayVM x:Key="HobbysForDisplayVM"/>
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="DemiBold"/>
+        </Style>
+        <Style TargetType="GridViewColumnHeader">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="DemiBold"/>
+        </Style>
+    </Window.Resources>
+    <!--Main grid-->
+    <Border>
+        <Grid DataContext="{StaticResource HobbysForDisplayVM}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MaxWidth="320"/>
+                <ColumnDefinition MinWidth="500"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <!--Search controls-->
+            <Border Background="AliceBlue" BorderBrush="Gainsboro" Margin="5,5,5,5" BorderThickness="1">
+                <WrapPanel Grid.Row="0">
+                    <Label Content="Search: " Margin="5,5,5,5"/>
+                    <TextBox Width="200" MinHeight="20" Margin="0,5,5,5" Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button x:Name="SearchButton" Width="95" Content="Search" Margin="70,5,5,5" Command="{Binding SearchCommand}"/>
+                    <Button x:Name="ClearButton" Width="95" Content="Clear" Margin="5,5,5,5" Command="{Binding ClearSearchCommand}"/>
+                </WrapPanel>
+            </Border>
+            <!--Text input-->
+            <Border Grid.Row="1" Background="AntiqueWhite" BorderBrush="Gainsboro" Margin="5,5,5,5" BorderThickness="1">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Hobby:" Margin="5,5,5,5"/>
+                        <TextBox Width="200" MinHeight="20" Margin="5,5,5,5" Text="{Binding NewHobby.Name, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="About: " Margin="5,5,5,5"/>
+                        <TextBox Width="200" Height="80" Margin="5,5,5,5" Text="{Binding NewHobby.About, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Is it fun?" Margin="5,5,5,5"/>
+                        <CheckBox VerticalAlignment="Center" Margin="0,5,5,5" IsChecked="{Binding NewHobby.IsFun, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <!--Editing buttons-->
+                    <WrapPanel Grid.Row="1">
+                        <Button x:Name="AddButton" Command="{Binding AddCommand}" Width="95" Content="Add" Margin="70,5,5,5"/>
+                        <Button x:Name="DeleteButton" Command="{Binding DeleteCommand}" Width="95" Content="Delete" Margin="5,5,5,5"/>
+                        <Button x:Name="EditButton" Command="{Binding EditCommand}" Width="95" Content="Edit" Margin="70,5,5,5"/>
+                        <Button x:Name="UpdateButton" Command="{Binding UpdateCommand}" Width="95" Content="Update" Margin="5,5,5,5"/>
+                    </WrapPanel>
+                </StackPanel>
+            </Border>
+            <!--Output-->
+            <ListView
+                    Grid.Column="1"
+                    Grid.RowSpan="3"  
+                    Margin="5,5,5,5"
+                    MaxHeight="350"
+                    FontSize="14"
+                    SelectedItem="{Binding SelectedHobby}"
+                    ItemsSource="{Binding FilteredHobbies}">
+                <ListView.View>
+                    <GridView AllowsColumnReorder="True" ColumnHeaderToolTip="List of hobbys">
+                        <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Hobby" Width="auto"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding About}" Header="About" Width="auto"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding IsFun}" Header="Is it fun?" Width="auto"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+    </Border>
+</Window>
