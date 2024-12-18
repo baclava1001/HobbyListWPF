@@ -1,5 +1,4 @@
-﻿using HobbyListWPF.ViewModels;
-using System.Windows;
+﻿using System.Windows;
 
 namespace HobbyListWPF
 {

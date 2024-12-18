@@ -1,15 +1,8 @@
 ﻿using HobbyListWPF.Commands;
 using HobbyListWPF.Models;
 using HobbyListWPF.MVVM;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -45,7 +38,7 @@ namespace HobbyListWPF.ViewModels
             }
 		}
 
-        // Wraps the original collection data in a filterable object
+        // Wraps the original collection data in a filterable collection
         private ICollectionView _filteredHobbies;
         public ICollectionView FilteredHobbies
         {
@@ -56,7 +49,7 @@ namespace HobbyListWPF.ViewModels
             set
             {
                 _filteredHobbies = value;
-                // Event handler triggered when the AllHobbys property is updated
+                // Event handler triggered when the FilteredHobbies property is updated
                 OnPropertyChanged();
             }
         }
@@ -108,9 +101,6 @@ namespace HobbyListWPF.ViewModels
                 OnPropertyChanged();
             }
         }
-
-        //public bool CanEditFlag { get; set; }
-        //public bool CanUpdateFlag { get; set; }
 
 
         // Constructor for the viewmodel adds some data to the _hobbies list
@@ -179,8 +169,11 @@ namespace HobbyListWPF.ViewModels
 
         private void DeleteHobby()
         {
-            Hobbies.Remove(SelectedHobby);
-            SelectedHobby = new();
+            if (SelectedHobby is not null)
+            {
+                Hobbies.Remove(SelectedHobby);
+                SelectedHobby = new();
+            }
         }
 
         private bool CanDeleteHobby() => SelectedHobby is not null
